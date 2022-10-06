@@ -30,8 +30,8 @@ app.get("/api/cars", (req, res) => {
 
 /****************** ROTA ADICIONAR CARRO  ***********************888**/
 app.post("/api/add-cars", async (req, res) => {
-  const { nome, modelo, ano, imagem } = req.body;
-  const novoCarro = { nome, modelo, ano, imagem };
+  const { nome, modelo, ano, imagem, preco } = req.body;
+  const novoCarro = { nome, modelo, ano, imagem, preco };
   try {
     await new Cars(novoCarro)
       .save()
