@@ -32,7 +32,7 @@ app.get("/api/cars", (req, res) => {
 
 /****************** ROTA ADICIONAR CARRO  ***********************888**/
 app.post("/api/add-cars", async (req, res) => {
-  const { nome, modelo, ano, preco } = req.body;
+  const { nome, modelo, ano, preco, imagem } = req.body;
   // const imagem = req.file.originalname;
   const novoCarro = { nome, modelo, ano, imagem, preco };
   try {
