@@ -12,6 +12,8 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+const upload = multer({ dest: "uploads/" });
+
 /********************************* ROTAS  **************************************888**/
 /****************** ROTA LISTAR CARRO   ***********************888**/
 app.get("/api/cars", (req, res) => {
@@ -29,8 +31,9 @@ app.get("/api/cars", (req, res) => {
 });
 
 /****************** ROTA ADICIONAR CARRO  ***********************888**/
-app.post("/api/add-cars", async (req, res) => {
-  const { nome, modelo, ano, imagem, preco } = req.body;
+app.post("/api/add-cars", upload.single("avatar"), async (req, res) => {
+  const { nome, modelo, ano, preco } = req.body;
+  const imagem = req.file.originalname;
   const novoCarro = { nome, modelo, ano, imagem, preco };
   try {
     await new Cars(novoCarro)
