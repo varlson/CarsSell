@@ -110,7 +110,8 @@ app.post("/api/editar/:id", async (req, res) => {
 });
 
 /********************************* FIM DE ROTAS  **************************************888**/
-
+const url =
+  "mongodb+srv://loginSystem:A6K2JjSJyxtCHD72@cluster0.tcc6i.mongodb.net/cars?retryWrites=true&w=majority";
 mongoose
   .connect(process.env.DB_URL, {
     useNewUrlParser: true,
