@@ -12,7 +12,15 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const upload = multer({ dest: "uploads/" });
+const storage = multer.diskStorage({
+  destination: (req, file, cn) => {
+    cb(null, "uploads/");
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + file.originalname);
+  },
+});
+const upload = multer({ storage });
 
 /********************************* ROTAS  **************************************888**/
 /****************** ROTA LISTAR CARRO   ***********************888**/
@@ -34,8 +42,6 @@ app.get("/api/cars", (req, res) => {
 app.post("/api/add-cars", upload.single("img"), async (req, res) => {
   const { nome, modelo, ano, preco, imagem } = req.body;
   const _imagem = req.file.originalname;
-  let cars = JSON.stringify(req.body.cars);
-  console.log(cars);
   // console.log({ nome, modelo, ano, preco });
   const novoCarro = { nome, modelo, ano, imagem, preco };
   try {
