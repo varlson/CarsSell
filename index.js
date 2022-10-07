@@ -34,7 +34,9 @@ app.get("/api/cars", (req, res) => {
 app.post("/api/add-cars", upload.single("img"), async (req, res) => {
   const { nome, modelo, ano, preco, imagem } = req.body;
   const _imagem = req.file.originalname;
-  console.log(_imagem);
+  let cars = JSON.stringify(req.body.cars);
+  console.log(cars);
+  // console.log({ nome, modelo, ano, preco });
   const novoCarro = { nome, modelo, ano, imagem, preco };
   try {
     await new Cars(novoCarro)
