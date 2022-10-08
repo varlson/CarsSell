@@ -1,4 +1,4 @@
-/.env
-/gderivekey.json
+.env
+gderivekey.json
 /node_modules
 /uploads
