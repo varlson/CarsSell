@@ -8,18 +8,21 @@ require("./models");
 const Cars = mongoose.model("cars");
 const PORT = 9888;
 app.use(cors());
+const { uploadFiles } = require("./controller");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads/");
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + file.originalname);
-  },
-});
+// const storage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     cb(null, "uploads/");
+//   },
+//   filename: (req, file, cb) => {
+//     cb(null, Date.now() + file.originalname);
+//   },
+// });
+
+const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
 /********************************* ROTAS  **************************************888**/
@@ -39,37 +42,43 @@ app.get("/api/cars", (req, res) => {
 });
 
 /****************** ROTA ADICIONAR CARRO  ***********************888**/
-app.post("/api/add-cars", upload.single("img"), async (req, res) => {
-  const { nome, modelo, ano, preco, imagem } = req.body;
-  const _imagem = req.file.originalname;
-  // console.log({ nome, modelo, ano, preco });
-  const novoCarro = { nome, modelo, ano, imagem, preco };
-  try {
-    await new Cars(novoCarro)
-      .save()
-      .then(() => {
-        res.status(200).json({
-          msg: "salvo com sucesso",
-          error: false,
-          succ: true,
+app.post(
+  "/api/add-cars",
+  upload.single("img"),
+  uploadFiles,
+  async (req, res) => {
+    const { nome, modelo, ano, preco } = req.body;
+    console.log(req.file);
+    console.log(`img link ${req.imgLink}`);
+    const imagem = req.imgLink;
+    const novoCarro = { nome, modelo, ano, imagem, preco };
+    try {
+      await new Cars(novoCarro)
+        .save()
+        .then(() => {
+          res.status(200).json({
+            msg: "salvo com sucesso",
+            error: false,
+            succ: true,
+          });
+        })
+        .catch((error) => {
+          console.log(`error to save ${error}`);
+          res.status(502).json({
+            msg: `erro na tentativa de adicionar caro ${error}`,
+            error: true,
+            succ: false,
+          });
         });
-      })
-      .catch((error) => {
-        console.log(`error to save ${error}`);
-        res.status(502).json({
-          msg: `erro na tentativa de adicionar caro ${error}`,
-          error: true,
-          succ: false,
-        });
+    } catch (error) {
+      es.status(502).json({
+        msg: `erro interno ${error}`,
+        error: true,
+        succ: false,
       });
-  } catch (error) {
-    es.status(502).json({
-      msg: `erro interno ${error}`,
-      error: true,
-      succ: false,
-    });
+    }
   }
-});
+);
 
 /****************** ROTA DELETE ROTAS  ***********************888**/
 app.get("/api/delete/:id", async (req, res) => {
