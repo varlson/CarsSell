@@ -8,7 +8,7 @@ require("./models");
 const Cars = mongoose.model("cars");
 const PORT = 9888;
 app.use(cors());
-const { uploadFiles } = require("./controller");
+const { uploadFiles, updateFile } = require("./controller");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -103,33 +103,40 @@ app.get("/api/delete/:id", async (req, res) => {
 
 /****************** ROTA EDITAR CARRO  ***********************888**/
 
-app.post("/api/editar/:id", async (req, res) => {
-  const { nome, modelo, ano, imagem } = req.body;
-  const novoCarro = { nome, modelo, ano, imagem };
-  try {
-    Cars.findByIdAndUpdate(req.params.id, novoCarro, (error, succ) => {
-      if (!error) {
-        return res.status(200).json({
-          msg: "salvo com sucesso",
-          error: false,
-          succ: true,
-        });
-      }
+app.post(
+  "/api/editar/:id",
+  upload.single("img"),
+  updateFile,
+  uploadFiles,
+  async (req, res) => {
+    const { nome, modelo, ano } = req.body;
+    const imagem = req.imgLink;
+    const novoCarro = { nome, modelo, ano, imagem };
+    try {
+      Cars.findByIdAndUpdate(req.params.id, novoCarro, (error, succ) => {
+        if (!error) {
+          return res.status(200).json({
+            msg: "salvo com sucesso",
+            error: false,
+            succ: true,
+          });
+        }
 
-      return res.status(502).json({
-        msg: `erro na tentativa de editar caro ${error}`,
+        return res.status(502).json({
+          msg: `erro na tentativa de editar caro ${error}`,
+          error: true,
+          succ: false,
+        });
+      });
+    } catch (error) {
+      es.status(502).json({
+        msg: `erro interno ${error}`,
         error: true,
         succ: false,
       });
-    });
-  } catch (error) {
-    es.status(502).json({
-      msg: `erro interno ${error}`,
-      error: true,
-      succ: false,
-    });
+    }
   }
-});
+);
 
 /********************************* FIM DE ROTAS  **************************************888**/
 const url =
