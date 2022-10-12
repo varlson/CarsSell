@@ -138,6 +138,40 @@ app.post(
   }
 );
 
+
+
+/****************** ROTA PEGAR UM CARRO  ***********************888**/
+
+app.get(
+  "/api/car/:id",
+  async (req, res) => {
+    const id = req.params.id;
+    try {
+      Cars.findOne({id:id}, (error, succ) => {
+        if (!error) {
+          return res.status(200).json({
+            data: succ,
+            error: false,
+            succ: true,
+          });
+        }
+
+        return res.status(502).json({
+          msg: `erro, nao foi localizado este carro ${error}`,
+          error: true,
+          succ: false,
+        });
+      });
+    } catch (error) {
+      es.status(502).json({
+        msg: `erro interno ${error}`,
+        error: true,
+        succ: false,
+      });
+    }
+  }
+);
+
 /********************************* FIM DE ROTAS  **************************************888**/
 const url =
   "mongodb+srv://loginSystem:A6K2JjSJyxtCHD72@cluster0.tcc6i.mongodb.net/cars?retryWrites=true&w=majority";
