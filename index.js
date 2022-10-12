@@ -17,7 +17,7 @@ app.use(express.urlencoded({ extended: true }));
 //   destination: (req, file, cb) => {
 //     cb(null, "uploads/");
 //   },
-//   filename: (req, file, cb) => {
+//   filename: (req,  file, cb) => {
 //     cb(null, Date.now() + file.originalname);
 //   },
 // });
@@ -82,7 +82,7 @@ app.post(
 );
 
 /****************** ROTA DELETE ROTAS  ***********************888**/
-app.get("/api/delete/:id", async (req, res) => {
+app.post("/api/delete/:id", updateFile, async (req, res) => {
   const id = req.params.id;
   try {
     Cars.findByIdAndDelete(id, (error, car) => {

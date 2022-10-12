@@ -58,31 +58,6 @@ module.exports = {
   },
 
   updateFile: async (req, res, next) => {
-    // console.log(`req id ${req.body.id}`);
-    // try {
-    //   const fileMetaData = {
-    //     name: req.file.originalname,
-    //     parents: [process.env.DRIVE_FOLDER_ID],
-    //   };
-    //   const buffer = new stream.PassThrough();
-    //   buffer.end(req.file.buffer);
-
-    //   const media = {
-    //     mimeType: req.file.mimetype,
-    //     body: buffer,
-    //   };
-
-    //   const res = await services.files.update({
-    //     fileId: req.body.id,
-    //     resource: fileMetaData,
-    //     media: media,
-    //   });
-    //   req.imgLink = `${process.env.GDRIVE_PREFIX}=${res.data.id}`;
-    //   next();
-    // } catch (error) {
-    //   console.log(`an error ocured ${error}`);
-    // }
-
     try {
       await services.files.delete({
         fileId: req.body.id,
