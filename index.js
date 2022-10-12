@@ -160,6 +160,7 @@ app.get(
           msg: `erro, nao foi localizado este carro ${error}`,
           error: true,
           succ: false,
+          
         });
       });
     } catch (error) {
